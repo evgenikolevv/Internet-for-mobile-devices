@@ -1,6 +1,7 @@
 package bg.tu.varna.informationSystem.service;
 
 import bg.tu.varna.informationSystem.common.Messages;
+import bg.tu.varna.informationSystem.dto.companies.CompanyResponseDto;
 import bg.tu.varna.informationSystem.dto.users.UserRequestDto;
 import bg.tu.varna.informationSystem.dto.users.UserResponseDto;
 import bg.tu.varna.informationSystem.entity.Role;
@@ -12,6 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class UserService {
 
@@ -19,18 +24,22 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
     private final RoleService roleService;
+    private final CompanyService companyService;
 
     @Autowired
     public UserService(UserRepository userRepository,
                        PasswordEncoder passwordEncoder,
                        ModelMapper modelMapper,
-                       RoleService roleService) {
+                       RoleService roleService,
+                       CompanyService companyService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
         this.roleService = roleService;
+        this.companyService = companyService;
     }
 
+    @Transactional
     public UserResponseDto save(UserRequestDto userRequestDto) {
         Boolean ifExists = userRepository.existsByUsername(userRequestDto.getUsername());
 
@@ -42,6 +51,15 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
 
         User savedUser = userRepository.save(user);
+
+        List<CompanyResponseDto> companies = companyService.findByIds(userRequestDto.getCompanyIds());
+        if (companies.isEmpty()) {
+            throw new BadRequestException(Messages.COMPANY_NOT_FOUND);
+        }
+
+        List<Long> ids = companies.stream().map(CompanyResponseDto::getId).collect(Collectors.toList());
+        companyService.assignUserToCompanies(user.getId(), ids);
+
         return convertToResponseDto(savedUser);
     }
 

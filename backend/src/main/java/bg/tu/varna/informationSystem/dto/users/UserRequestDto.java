@@ -4,6 +4,7 @@ import bg.tu.varna.informationSystem.annotations.Role;
 import bg.tu.varna.informationSystem.common.RoleTypes;
 
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 public class UserRequestDto {
 
@@ -20,6 +21,9 @@ public class UserRequestDto {
 
     @Role(enumClass = RoleTypes.class, ignoreCase = true)
     private String roleName;
+
+    @NotEmpty
+    private List<Long> companyIds;
 
     public String getUsername() {
         return username;
@@ -59,5 +63,13 @@ public class UserRequestDto {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public List<Long> getCompanyIds() {
+        return companyIds;
+    }
+
+    public void setCompanyIds(List<Long> companyIds) {
+        this.companyIds = companyIds;
     }
 }

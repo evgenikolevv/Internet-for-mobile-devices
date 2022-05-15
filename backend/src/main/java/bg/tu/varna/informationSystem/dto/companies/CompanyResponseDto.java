@@ -1,16 +1,8 @@
-package bg.tu.varna.informationSystem.entity;
+package bg.tu.varna.informationSystem.dto.companies;
 
-import javax.persistence.*;
+public class CompanyResponseDto {
 
-@Entity
-@Table(name = "companies")
-public class Company {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "name")
     private String name;
 
     public Long getId() {

@@ -77,3 +77,7 @@ VALUES(2, 2);
 INSERT INTO public.roles_permissions
 (role_id, permission_id)
 VALUES(2, 3);
+
+INSERT INTO public.users
+(username, "password", first_name, last_name, role_id)
+VALUES('user1', '$2a$10$m3hJHvGrXGlvToBrXRKxQ.Nz/p3JxEhnBpv3Pu61CljJHY17wyuIq', 'Ivan', 'Ivanov', 3);
