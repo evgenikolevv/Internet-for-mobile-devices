@@ -19,4 +19,10 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
     @Modifying
     @Query(value = "INSERT INTO users_companies(user_id,company_id) VALUES(:userId,:companyId)", nativeQuery = true)
     void assignUserToCompany(@Param("userId") Long userId, @Param("companyId") Long companyId);
+
+    @Query(value = "select * from users_companies "
+            + "join users on users_companies.user_id = users.id "
+            + "join companies on users_companies.company_id  = company_id "
+            + "where users.id = :userId", nativeQuery = true)
+    List<Company> getCompaniesByUserId(@Param("userId") Long userId);
 }

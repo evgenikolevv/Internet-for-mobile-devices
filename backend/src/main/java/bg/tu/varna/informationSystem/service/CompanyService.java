@@ -52,6 +52,9 @@ public class CompanyService {
         companies.forEach(companyId -> assignUserToCompany(userId, companyId));
     }
 
+    public List<Company> getCompaniesByUserId(Long userId) {
+        return companyRepository.getCompaniesByUserId(userId);
+    }
 
     private CompanyResponseDto convertToResponseDto(Company company) {
         return modelMapper.map(company, CompanyResponseDto.class);
