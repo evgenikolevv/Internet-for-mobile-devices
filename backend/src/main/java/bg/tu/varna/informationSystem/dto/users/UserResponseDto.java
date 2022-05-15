@@ -1,29 +1,12 @@
-package bg.tu.varna.informationSystem.entity;
+package bg.tu.varna.informationSystem.dto.users;
 
-import javax.persistence.*;
+public class UserResponseDto {
 
-@Entity
-@Table(name = "users")
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "username", unique = true)
     private String username;
-
-    @Column(name = "password")
-    private String password;
-
-    @Column(name = "first_name")
     private String firstName;
-
-    @Column(name = "last_name")
     private String lastName;
-
-    @Column(name = "role_id")
-    private Long roleId;
+    private String roleName;
 
     public Long getId() {
         return id;
@@ -39,14 +22,6 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getFirstName() {
@@ -65,11 +40,11 @@ public class User {
         this.lastName = lastName;
     }
 
-    public Long getRoleId() {
-        return roleId;
+    public String getRoleName() {
+        return roleName;
     }
 
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 }

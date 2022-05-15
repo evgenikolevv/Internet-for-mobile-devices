@@ -23,4 +23,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<String> getUserPermissions(@Param("username") String username);
 
     Optional<User> findByUsername(String username);
+
+    Boolean existsByUsername(String username);
 }

@@ -1,37 +1,25 @@
-package bg.tu.varna.informationSystem.entity;
+package bg.tu.varna.informationSystem.dto.users;
 
-import javax.persistence.*;
+import bg.tu.varna.informationSystem.annotations.Role;
+import bg.tu.varna.informationSystem.common.RoleTypes;
 
-@Entity
-@Table(name = "users")
-public class User {
+import javax.validation.constraints.NotEmpty;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class UserRequestDto {
 
-    @Column(name = "username", unique = true)
+    @NotEmpty
     private String username;
-
-    @Column(name = "password")
+    @NotEmpty
     private String password;
 
-    @Column(name = "first_name")
+    @NotEmpty
     private String firstName;
 
-    @Column(name = "last_name")
+    @NotEmpty
     private String lastName;
 
-    @Column(name = "role_id")
-    private Long roleId;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Role(enumClass = RoleTypes.class, ignoreCase = true)
+    private String roleName;
 
     public String getUsername() {
         return username;
@@ -49,6 +37,14 @@ public class User {
         this.password = password;
     }
 
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -63,13 +59,5 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public Long getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
     }
 }
