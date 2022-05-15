@@ -3,6 +3,7 @@ package bg.tu.varna.informationSystem.service;
 import bg.tu.varna.informationSystem.common.Messages;
 import bg.tu.varna.informationSystem.dto.LoginRequestDTO;
 import bg.tu.varna.informationSystem.dto.LoginResponseDTO;
+import bg.tu.varna.informationSystem.entity.Role;
 import bg.tu.varna.informationSystem.entity.User;
 import bg.tu.varna.informationSystem.exception.BadRequestException;
 import bg.tu.varna.informationSystem.repository.UserRepository;
@@ -18,12 +19,17 @@ public class LoginService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
+    private final RoleService roleService;
 
     @Autowired
-    public LoginService(UserRepository userRepository, PasswordEncoder passwordEncoder, TokenService tokenService) {
+    public LoginService(UserRepository userRepository,
+                        PasswordEncoder passwordEncoder,
+                        TokenService tokenService,
+                        RoleService roleService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenService = tokenService;
+        this.roleService = roleService;
     }
 
     public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
@@ -35,6 +41,7 @@ public class LoginService {
         }
 
         List<String> permissions = userRepository.getUserPermissions(user.getUsername());
-        return tokenService.generateToken(user, permissions);
+        Role role = roleService.findRoleById(user.getRoleId());
+        return tokenService.generateToken(user, permissions, role.getName());
     }
 }

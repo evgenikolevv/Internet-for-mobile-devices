@@ -10,11 +10,13 @@ public class UserPrincipal implements Principal {
     private Long id;
     private String userName;
     private List<String> permissions;
+    private String roleName;
 
-    public UserPrincipal(Long id, String userName, List<String> permissions) {
+    public UserPrincipal(Long id, String userName, List<String> permissions, String roleName) {
         this.id = id;
         this.userName = userName;
         this.permissions = permissions;
+        this.roleName = roleName;
     }
 
     public Long getId() {
@@ -39,6 +41,14 @@ public class UserPrincipal implements Principal {
 
     public void setPermissions(List<String> permissions) {
         this.permissions = permissions;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
     @Override
