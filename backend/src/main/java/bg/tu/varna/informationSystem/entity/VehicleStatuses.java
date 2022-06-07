@@ -7,19 +7,23 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "companies")
-public class Company {
+@Table(name = "vehicle_statuses")
+public class VehicleStatuses {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vehicle_id")
+    private Vehicle vehicle;
 
-    public Long getId() {
-        return id;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "rent_id")
+    private Rent rent;
+
+    @Column(name = "description")
+    private String description;
 
     @CreationTimestamp
     @Column(name = "created_ts")
@@ -29,16 +33,36 @@ public class Company {
     @Column(name = "updated_ts")
     private LocalDateTime updatedTs;
 
+    public Long getId() {
+        return id;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Vehicle getVehicle() {
+        return vehicle;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public Rent getRent() {
+        return rent;
+    }
+
+    public void setRent(Rent rent) {
+        this.rent = rent;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public LocalDateTime getCreatedTs() {
