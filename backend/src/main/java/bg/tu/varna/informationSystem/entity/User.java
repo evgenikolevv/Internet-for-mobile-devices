@@ -1,6 +1,10 @@
 package bg.tu.varna.informationSystem.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
@@ -24,6 +28,14 @@ public class User {
 
     @Column(name = "role_id")
     private Long roleId;
+
+    @CreationTimestamp
+    @Column(name = "created_ts")
+    private LocalDateTime createdTs;
+
+    @UpdateTimestamp
+    @Column(name = "updated_ts")
+    private LocalDateTime updatedTs;
 
     public Long getId() {
         return id;
@@ -71,5 +83,21 @@ public class User {
 
     public void setRoleId(Long roleId) {
         this.roleId = roleId;
+    }
+
+    public LocalDateTime getCreatedTs() {
+        return createdTs;
+    }
+
+    public void setCreatedTs(LocalDateTime createdTs) {
+        this.createdTs = createdTs;
+    }
+
+    public LocalDateTime getUpdatedTs() {
+        return updatedTs;
+    }
+
+    public void setUpdatedTs(LocalDateTime updatedTs) {
+        this.updatedTs = updatedTs;
     }
 }
