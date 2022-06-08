@@ -36,7 +36,7 @@ public class Vehicle {
     private Engine engine;
 
     @Column(name = "available")
-    private boolean available;
+    private boolean isAvailable;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
@@ -106,12 +106,12 @@ public class Vehicle {
         this.engine = engine;
     }
 
-    public boolean isAvailable() {
-        return available;
+    public boolean getIsAvailable() {
+        return isAvailable;
     }
 
-    public void setAvailable(boolean available) {
-        this.available = available;
+    public void setIsAvailable(boolean available) {
+        this.isAvailable = available;
     }
 
     public Company getCompany() {
