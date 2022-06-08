@@ -1,9 +1,17 @@
+
+drop table vehicle_statuses;
+drop table rents;
+drop table vehicle_details;
+drop table vehicles;
+drop table categories;
+drop table car_classes;
+drop table engines;
+drop table clients;
 drop table users_companies;
-drop table users;
 drop table companies;
 drop table roles_permissions;
-drop table roles;
 drop table permissions;
+drop table roles;
 
 create table roles(
 	id serial not null primary key,
@@ -54,7 +62,7 @@ create table users_companies(
 );
 
 create table clients(
-	id int not null primary key,
+	id bigserial not null primary key,
 	first_name varchar(255) not null,
 	last_name varchar(255) not null,
 	email varchar(320) not null,
@@ -67,25 +75,25 @@ create table clients(
 );
 
 create table engines(
-	id int not null primary key,
+	id bigserial not null primary key,
 	name varchar(100) not null,
 	constraint ux_engines_name unique(name)
 );
 
 create table car_classes(
-	id int not null primary key,
+	id bigserial not null primary key,
 	name varchar(100) not null,
 	constraint ux_car_classes_name unique(name)
 );
 
 create table categories(
-	id int not null primary key,
+	id bigserial not null primary key,
 	name varchar(100) not null,
 	constraint ux_categories_name unique(name)
 );
 
 create table vehicles(
-	id int not null primary key,
+	id bigserial not null primary key,
 	make varchar(255) not null,
 	model varchar(255) not null,
 	year int not null,
@@ -105,7 +113,7 @@ create table vehicles(
 );
 
 create table vehicle_details(
-	id int not null primary key,
+	id bigserial not null primary key,
 	vehicle_id int unique,
 	doors varchar(100) not null,
 	day_price numeric not null,
@@ -119,7 +127,7 @@ create table vehicle_details(
 );
 
 create table rents(
-	id int not null primary key,
+	id bigserial not null primary key,
 	date_from timestamp not null,
 	date_to timestamp not null,
 	final_price numeric not null,
@@ -137,7 +145,7 @@ create table rents(
 
 
 create table vehicle_statuses(
-	id int not null primary key,
+	id bigserial not null primary key,
 	vehicle_id int not null,
 	rent_id int not null,
 	description text not null,

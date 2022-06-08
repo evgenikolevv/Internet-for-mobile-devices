@@ -44,6 +44,11 @@ public class CompanyService {
                 .collect(Collectors.toList());
     }
 
+    public Company findById(Long id) {
+        return companyRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException(Messages.COMPANY_NOT_FOUND));
+    }
+
     private void assignUserToCompany(Long userId, Long companyId) {
         companyRepository.assignUserToCompany(userId, companyId);
     }

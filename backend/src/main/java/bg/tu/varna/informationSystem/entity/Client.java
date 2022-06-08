@@ -34,6 +34,10 @@ public class Client {
     @Column(name = "updated_ts")
     private LocalDateTime updatedTs;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id")
+    private Company company;
+
     public Long getId() {
         return id;
     }
@@ -88,5 +92,13 @@ public class Client {
 
     public void setUpdatedTs(LocalDateTime updatedTs) {
         this.updatedTs = updatedTs;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
 }

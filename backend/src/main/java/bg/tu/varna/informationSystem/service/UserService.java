@@ -1,6 +1,7 @@
 package bg.tu.varna.informationSystem.service;
 
 import bg.tu.varna.informationSystem.common.Messages;
+import bg.tu.varna.informationSystem.common.RoleTypes;
 import bg.tu.varna.informationSystem.dto.companies.CompanyResponseDto;
 import bg.tu.varna.informationSystem.dto.users.UserRequestDto;
 import bg.tu.varna.informationSystem.dto.users.UserResponseDto;
@@ -8,6 +9,8 @@ import bg.tu.varna.informationSystem.entity.Role;
 import bg.tu.varna.informationSystem.entity.User;
 import bg.tu.varna.informationSystem.exception.BadRequestException;
 import bg.tu.varna.informationSystem.repository.UserRepository;
+import bg.tu.varna.informationSystem.security.UserPrincipal;
+import bg.tu.varna.informationSystem.utils.UserPrincipalUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,6 +44,12 @@ public class UserService {
 
     @Transactional
     public UserResponseDto save(UserRequestDto userRequestDto) {
+        UserPrincipal userPrincipal = UserPrincipalUtils.getPrincipalFromContext();
+        if (!userPrincipal.getRoleName().equals(RoleTypes.ADMIN.toString())
+                && !userRequestDto.getRoleName().equals(RoleTypes.AGENT.toString())) {
+            throw new BadRequestException(Messages.PERMISSION_DENIED);
+        }
+
         Boolean ifExists = userRepository.existsByUsername(userRequestDto.getUsername());
 
         if (ifExists) {

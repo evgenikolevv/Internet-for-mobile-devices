@@ -9,4 +9,5 @@ public class Messages {
     public static final String COMPANY_NOT_FOUND = "company not found.";
     public static final String ACCESS_DENIED = "Access denied.";
     public static final String NOT_ASSIGNED_TO_COMPANY = "Not assigned to a company.";
+    public static final String PERMISSION_DENIED = "Denied permission.";
 }
