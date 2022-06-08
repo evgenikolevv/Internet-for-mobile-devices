@@ -10,4 +10,9 @@ public class Messages {
     public static final String ACCESS_DENIED = "Access denied.";
     public static final String NOT_ASSIGNED_TO_COMPANY = "Not assigned to a company.";
     public static final String PERMISSION_DENIED = "Denied permission.";
+    public static final String ENGINE_NOT_FOUND = "Engine not found.";
+    public static final String CATEGORY_NOT_FOUND = "Category not found.";
+    public static final String CAR_CLASS_NOT_FOUND = "Car class not found.";
+    public static final String VEHICLE_NOT_FOUND = "Vehicle not found.";
+    public static final String VEHICLE_DETAILS_NOT_FOUND = "Vehicle details not found.";
 }
