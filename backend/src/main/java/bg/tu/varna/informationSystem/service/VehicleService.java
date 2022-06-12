@@ -1,18 +1,21 @@
 package bg.tu.varna.informationSystem.service;
 
 import bg.tu.varna.informationSystem.common.Messages;
-import bg.tu.varna.informationSystem.dto.vehicledetails.VehicleDetailsDto;
+import bg.tu.varna.informationSystem.dto.vehicles.VehicleDetailsDto;
 import bg.tu.varna.informationSystem.dto.vehicles.VehicleRequestDto;
 import bg.tu.varna.informationSystem.dto.vehicles.VehicleResponseDto;
+import bg.tu.varna.informationSystem.dto.vehicles.VehicleStatusDto;
 import bg.tu.varna.informationSystem.entity.*;
 import bg.tu.varna.informationSystem.exception.BadRequestException;
 import bg.tu.varna.informationSystem.repository.VehicleDetailsRepository;
 import bg.tu.varna.informationSystem.repository.VehicleRepository;
+import bg.tu.varna.informationSystem.repository.VehicleStatusRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 
 @Service
 public class VehicleService {
@@ -24,6 +27,7 @@ public class VehicleService {
     private final CategoryService categoryService;
     private final EngineService engineService;
     private final ModelMapper modelMapper;
+    private final VehicleStatusRepository vehicleStatusRepository;
 
     @Autowired
     public VehicleService(VehicleRepository vehicleRepository,
@@ -32,7 +36,8 @@ public class VehicleService {
                           CarClassService carClassService,
                           CategoryService categoryService,
                           EngineService engineService,
-                          ModelMapper modelMapper) {
+                          ModelMapper modelMapper,
+                          VehicleStatusRepository vehicleStatusRepository) {
         this.vehicleRepository = vehicleRepository;
         this.vehicleDetailsRepository = vehicleDetailsRepository;
         this.companyService = companyService;
@@ -40,6 +45,7 @@ public class VehicleService {
         this.categoryService = categoryService;
         this.engineService = engineService;
         this.modelMapper = modelMapper;
+        this.vehicleStatusRepository = vehicleStatusRepository;
     }
 
     public VehicleResponseDto getById(Long id) {
@@ -89,10 +95,34 @@ public class VehicleService {
         return convertToResponseDto(savedVehicle, savedDetails);
     }
 
+    public Vehicle getVehicleIfAvailable(Long vehicleId, LocalDateTime dateFrom, LocalDateTime dateTo) {
+        Boolean isAvailable = vehicleRepository.isAvailable(vehicleId, dateFrom, dateTo);
+
+        if (!isAvailable) {
+            throw new BadRequestException(Messages.VEHICLE_NOT_AVAILABLE);
+        }
+
+        return findVehicleById(vehicleId);
+    }
+
+    public VehicleDetails getVehicleDetails(Long vehicleId) {
+        Vehicle vehicle = findVehicleById(vehicleId);
+        return findVehicleDetailsByVehicle(vehicle);
+    }
+
+    public VehicleStatusDto saveVehicleStatus(Vehicle vehicle, Rent rent, String description) {
+        VehicleStatuses vehicleStatus = new VehicleStatuses(vehicle, rent, description);
+        return convertToResponseDto(vehicleStatusRepository.save(vehicleStatus));
+    }
+
     private VehicleResponseDto convertToResponseDto(Vehicle vehicle, VehicleDetails vehicleDetails) {
         VehicleResponseDto result = modelMapper.map(vehicle, VehicleResponseDto.class);
         VehicleDetailsDto vehicleDetailsDto = modelMapper.map(vehicleDetails, VehicleDetailsDto.class);
         result.setVehicleDetails(vehicleDetailsDto);
         return result;
+    }
+
+    private VehicleStatusDto convertToResponseDto(VehicleStatuses vehicleStatus) {
+        return modelMapper.map(vehicleStatus, VehicleStatusDto.class);
     }
 }

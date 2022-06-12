@@ -15,4 +15,7 @@ public class Messages {
     public static final String CAR_CLASS_NOT_FOUND = "Car class not found.";
     public static final String VEHICLE_NOT_FOUND = "Vehicle not found.";
     public static final String VEHICLE_DETAILS_NOT_FOUND = "Vehicle details not found.";
+    public static final String CLIENT_NOT_FOUND = "Client not found.";
+    public static final String VEHICLE_NOT_AVAILABLE = "Vehicle is not available.";
+    public static final String USER_NOT_FOUND = "User not found.";
 }

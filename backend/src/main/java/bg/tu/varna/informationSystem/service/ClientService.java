@@ -1,9 +1,11 @@
 package bg.tu.varna.informationSystem.service;
 
+import bg.tu.varna.informationSystem.common.Messages;
 import bg.tu.varna.informationSystem.dto.clients.ClientRequestDto;
 import bg.tu.varna.informationSystem.dto.clients.ClientResponseDto;
 import bg.tu.varna.informationSystem.entity.Client;
 import bg.tu.varna.informationSystem.entity.Company;
+import bg.tu.varna.informationSystem.exception.BadRequestException;
 import bg.tu.varna.informationSystem.repository.ClientRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,14 @@ public class ClientService {
 
         Client savedClient = clientRepository.save(client);
         return convertToResponseDto(clientRepository.save(savedClient));
+    }
+
+    public Client findById(Long id) {
+        return clientRepository.findById(id).orElseThrow(() -> new BadRequestException(Messages.CLIENT_NOT_FOUND));
+    }
+
+    public ClientResponseDto getById(Long id) {
+        return convertToResponseDto(findById(id));
     }
 
     private ClientResponseDto convertToResponseDto(Client client) {

@@ -4,7 +4,6 @@ import bg.tu.varna.informationSystem.dto.carclasses.CarClassDto;
 import bg.tu.varna.informationSystem.dto.categories.CategoryDto;
 import bg.tu.varna.informationSystem.dto.companies.CompanyResponseDto;
 import bg.tu.varna.informationSystem.dto.engines.EngineDto;
-import bg.tu.varna.informationSystem.dto.vehicledetails.VehicleDetailsDto;
 
 public class VehicleResponseDto {
 

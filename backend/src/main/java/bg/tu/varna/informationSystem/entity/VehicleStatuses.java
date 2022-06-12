@@ -33,6 +33,16 @@ public class VehicleStatuses {
     @Column(name = "updated_ts")
     private LocalDateTime updatedTs;
 
+    public VehicleStatuses() {
+
+    }
+
+    public VehicleStatuses(Vehicle vehicle, Rent rent, String description) {
+        this.vehicle = vehicle;
+        this.rent = rent;
+        this.description = description;
+    }
+
     public Long getId() {
         return id;
     }
