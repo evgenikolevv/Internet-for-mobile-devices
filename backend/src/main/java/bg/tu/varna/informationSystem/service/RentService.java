@@ -1,13 +1,16 @@
 package bg.tu.varna.informationSystem.service;
 
-import bg.tu.varna.informationSystem.common.VehicleStatuses;
+import bg.tu.varna.informationSystem.common.Messages;
+import bg.tu.varna.informationSystem.common.VehicleStatus;
 import bg.tu.varna.informationSystem.dto.clients.ClientResponseDto;
 import bg.tu.varna.informationSystem.dto.rents.RentRequestDto;
 import bg.tu.varna.informationSystem.dto.rents.RentResponseDto;
+import bg.tu.varna.informationSystem.dto.rents.RentReturnVehicleDto;
 import bg.tu.varna.informationSystem.dto.users.UserResponseDto;
 import bg.tu.varna.informationSystem.dto.vehicles.VehicleResponseDto;
 import bg.tu.varna.informationSystem.dto.vehicles.VehicleStatusDto;
 import bg.tu.varna.informationSystem.entity.*;
+import bg.tu.varna.informationSystem.exception.BadRequestException;
 import bg.tu.varna.informationSystem.repository.RentRepository;
 import bg.tu.varna.informationSystem.utils.ApplicationUtils;
 import bg.tu.varna.informationSystem.utils.UserPrincipalUtils;
@@ -69,10 +72,14 @@ public class RentService {
         rent.setFinalPrice(finalPrice);
 
         Rent savedRent = rentRepository.save(rent);
-        VehicleStatusDto vehicleStatusDto = vehicleService.saveVehicleStatus(vehicle, rent, VehicleStatuses.GOOD_CONDITION.getText());
+        VehicleStatusDto vehicleStatusDto = vehicleService.saveVehicleStatus(vehicle, rent, VehicleStatus.GOOD_CONDITION.getText());
         RentResponseDto result = convertToResponseDto(savedRent);
         result.setVehicleStatus(vehicleStatusDto);
         return result;
+    }
+
+    public Rent findById(Long id) {
+        return rentRepository.findById(id).orElseThrow(() -> new BadRequestException(Messages.RENT_NOT_FOUND));
     }
 
     private BigDecimal calculateFinalPrice(long days, BigDecimal dayPrice, long kilometers, BigDecimal kilometerPrice) {
@@ -91,4 +98,36 @@ public class RentService {
         result.setUser(userDto);
         return result;
     }
+
+    public RentResponseDto update(Long id, RentReturnVehicleDto dto) {
+        LocalDateTime dateReturned = ApplicationUtils.parseDateTime(dto.getDateReturned());
+        Rent rent = findById(id);
+        VehicleDetails details = vehicleService.findVehicleDetailsByVehicle(rent.getVehicle());
+        long delta = Duration.between(rent.getDateFrom(), rent.getDateTo()).toDays() + 1L;
+
+
+        if (rent.getDateReturned() != null) {
+            throw new BadRequestException(Messages.RENT_VEHICLE_ALREADY_RETURNED);
+        }
+
+        rent.setDateReturned(dateReturned);
+        rent.setKilometers(dto.getKilometers());
+
+        BigDecimal finalPrice = calculateFinalPrice(delta, details.getDayPrice(), dto.getKilometers(), details.getKilometerPrice());
+        rent.setFinalPrice(addAdditionalCost(finalPrice, dto.getIsDamaged()));
+
+        VehicleStatusDto status = vehicleService.saveVehicleStatus(rent.getVehicle(), rent, dto.getVehicleCondition());
+        RentResponseDto result = convertToResponseDto(rentRepository.save(rent));
+        result.setVehicleStatus(status);
+
+        return result;
+    }
+
+    private BigDecimal addAdditionalCost(BigDecimal finalPrice, boolean isDamaged) {
+        if (isDamaged) {
+            return finalPrice.add(new BigDecimal((int) (Math.random() * (1000 - 100)) + 100));
+        }
+        return finalPrice;
+    }
+
 }
