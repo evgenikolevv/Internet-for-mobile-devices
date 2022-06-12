@@ -18,4 +18,6 @@ public class Messages {
     public static final String CLIENT_NOT_FOUND = "Client not found.";
     public static final String VEHICLE_NOT_AVAILABLE = "Vehicle is not available.";
     public static final String USER_NOT_FOUND = "User not found.";
+    public static final String RENT_NOT_FOUND = "Rent not found.";
+    public static final String RENT_VEHICLE_ALREADY_RETURNED = "Vehicle already returned.";
 }

@@ -1,13 +1,13 @@
 package bg.tu.varna.informationSystem.common;
 
-public enum VehicleStatuses {
+public enum VehicleStatus {
 
     GOOD_CONDITION("Колата е в добро състояние."),
     BAD_CONDITION("Колата е повредена.");
 
     private final String text;
 
-    VehicleStatuses(String text) {
+    VehicleStatus(String text) {
         this.text = text;
     }
 

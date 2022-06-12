@@ -4,10 +4,12 @@ import bg.tu.varna.informationSystem.common.Messages;
 import bg.tu.varna.informationSystem.common.RoleTypes;
 import bg.tu.varna.informationSystem.entity.Client;
 import bg.tu.varna.informationSystem.entity.Company;
+import bg.tu.varna.informationSystem.entity.Rent;
 import bg.tu.varna.informationSystem.exception.BadRequestException;
 import bg.tu.varna.informationSystem.security.UserPrincipal;
 import bg.tu.varna.informationSystem.service.ClientService;
 import bg.tu.varna.informationSystem.service.CompanyService;
+import bg.tu.varna.informationSystem.service.RentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,11 +20,13 @@ public class ResourceValidator {
 
     private final CompanyService companyService;
     private final ClientService clientService;
+    private final RentService rentService;
 
     @Autowired
-    public ResourceValidator(CompanyService companyService, ClientService clientService) {
+    public ResourceValidator(CompanyService companyService, ClientService clientService, RentService rentService) {
         this.companyService = companyService;
         this.clientService = clientService;
+        this.rentService = rentService;
     }
 
     public void validateCompanyAccess(Long companyId) {
@@ -46,5 +50,10 @@ public class ResourceValidator {
     public void validateClientAccess(Long clientId) {
         Client client = clientService.findById(clientId);
         validateCompanyAccess(client.getCompany().getId());
+    }
+
+    public void validateRentAccess(Long rentId) {
+        Rent rent = rentService.findById(rentId);
+        validateCompanyAccess(rent.getClient().getCompany().getId());
     }
 }
