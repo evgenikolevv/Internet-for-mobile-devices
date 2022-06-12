@@ -1,4 +1,4 @@
-package bg.tu.varna.informationSystem.dto.vehicledetails;
+package bg.tu.varna.informationSystem.dto.vehicles;
 
 import java.math.BigDecimal;
 

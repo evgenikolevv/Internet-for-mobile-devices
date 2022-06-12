@@ -72,6 +72,10 @@ public class UserService {
         return convertToResponseDto(savedUser);
     }
 
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new BadRequestException(Messages.USER_NOT_FOUND));
+    }
+
     private UserResponseDto convertToResponseDto(User user) {
         UserResponseDto responseDto = modelMapper.map(user, UserResponseDto.class);
         Role role = roleService.findRoleById(user.getRoleId());
@@ -84,5 +88,9 @@ public class UserService {
         Role role = roleService.findRoleByName(userDto.getRoleName());
         user.setRoleId(role.getId());
         return user;
+    }
+
+    public UserResponseDto getById(Long id) {
+        return convertToResponseDto(findById(id));
     }
 }
